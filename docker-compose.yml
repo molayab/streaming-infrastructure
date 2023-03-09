@@ -1,0 +1,51 @@
+version: "3.9"
+
+volumes:
+  db_data:
+  hls_data:
+
+x-shared_environment: &shared_environment
+  LOG_LEVEL: ${LOG_LEVEL:-debug}
+  DATABASE_HOST: database
+  DATABASE_PORT: 5432
+  POSTGRES_USER: app
+  POSTGRES_PASSWORD: "P$aash%$659h"
+  POSTGRES_DB: app_database
+
+services:
+
+# MAIN - APPLICATION STACK
+
+  api:
+    build: "./api/."
+    ports:
+      - "80:80"
+    depends_on:
+      - streamer
+  streamer:
+    build: "./streamer/."
+    ports:
+      - "9001-9002:1935"
+    depends_on:
+     - authentication
+    deploy:
+      replicas: 2
+    volumes:
+      - hls_data:/mnt/www/hls
+  authentication:
+    build: "./authentication/."
+    ports:
+     - "8081:8080"
+    depends_on:
+      - database
+    environment:
+      <<: *shared_environment
+  database:
+    image: 'postgres:latest'
+    ports:
+      - 5432:5432
+    environment:
+      <<: *shared_environment
+      PGDATA: /var/lib/postgresql/data/app/
+    volumes:
+      - db_data:/var/lib/postgresql/data/pgdata

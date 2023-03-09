@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug Run (authentication)",
+            "program": "${workspaceFolder:Streaming}/authentication/.build/debug/Run",
+            "args": [],
+            "cwd": "${workspaceFolder:Streaming}/authentication",
+            "preLaunchTask": "swift: Build Debug Run (authentication)"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Release Run (authentication)",
+            "program": "${workspaceFolder:Streaming}/authentication/.build/release/Run",
+            "args": [],
+            "cwd": "${workspaceFolder:Streaming}/authentication",
+            "preLaunchTask": "swift: Build Release Run (authentication)"
+        }
+    ]
+}
